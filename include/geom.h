@@ -3,6 +3,7 @@
 #include <material.h>
 
 #include "Sphere.h"
+#include "Cylinder.h"
 
 class Geometry
 {
@@ -41,13 +42,13 @@ public:
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
 };
 
-class Cylinder : public Geometry
+/*class Cylinder : public Geometry
 {
 public:
 	Cylinder(vec3 position, vec3 orientation, vec3 scaling, Material* mtl = new Material());
 
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
-};
+};*/
 
 class Cone : public Geometry
 {

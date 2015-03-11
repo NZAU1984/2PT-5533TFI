@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Cylinder.cpp" />
     <ClCompile Include="..\..\src\geom.cpp" />
     <ClCompile Include="..\..\src\log.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
@@ -22,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\basic_structs.h" />
+    <ClInclude Include="..\..\include\Cylinder.h" />
     <ClInclude Include="..\..\include\geom.h" />
     <ClInclude Include="..\..\include\log.h" />
     <ClInclude Include="..\..\include\main.h" />
