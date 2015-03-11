@@ -63,9 +63,10 @@ std::unique_ptr<struct Intersection> Cone::intersect(const struct Ray& ray, deci
 		{
 			intersectionPoint = *intersectionWithExtremity.get();
 
-			if (sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2)) >= 1.0001)
+			if ((sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2)) >= 1.0001)
+				|| (glm::distance(intersectionPoint, ray.origin) > currentdepth))
 			{
-				/* Intersecting the top, but not inside the circle. */
+				/* Intersecting the top, but not inside the circle OR if distance is > currentdepth -> let's exit. */
 
 				return nullptr;
 			}
@@ -82,9 +83,11 @@ std::unique_ptr<struct Intersection> Cone::intersect(const struct Ray& ray, deci
 		/* Intersecting the side. Let's calculate the intersection point. If t0 < 0, we must use t1. */
 		intersectionPoint = transformedRayOrigin + ((double)((0 > t0) ? t1 : t0)) * transformedRayDirection;
 
-		if (intersectionPoint.y < -1.0001 || intersectionPoint.y > 0.0001) // epsilon
+		if ((intersectionPoint.y < -1.0001 || intersectionPoint.y > 0.0001)
+			|| (glm::distance(intersectionPoint, ray.origin) > currentdepth)) // epsilon
 		{
-			/* If the 'y' coordinate of the intersection is not in [-1, 0], we're not intersection the cylinder. */
+			/* If the 'y' coordinate of the intersection is not in [-1, 0], we're not intersection the cylinder
+			OR if distance > currentdepth -> let's exit. */
 
 			return nullptr;
 		}
@@ -102,7 +105,6 @@ std::unique_ptr<struct Intersection> Cone::intersect(const struct Ray& ray, deci
 	/* Now calculating uv coordinates. */
 
 	float u, v;
-	float z = intersectionPoint.z;
 
 	if (checkExtremity)
 	{

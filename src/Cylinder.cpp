@@ -60,9 +60,10 @@ std::unique_ptr<struct Intersection> Cylinder::intersect(const struct Ray& ray, 
 		{
 			intersectionPoint = *intersectionWithExtremity.get();
 
-			if (sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2)) >= 1.0001)
+			if (sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2)) >= 1.0001
+				|| (glm::distance(intersectionPoint, ray.origin) > currentdepth))
 			{
-				/* Intersecting the top, but not inside the circle. */
+				/* Intersecting the top, but not inside the circle OR distance > currentdepth -> let's exit. */
 
 				return nullptr;
 			}
@@ -82,9 +83,10 @@ std::unique_ptr<struct Intersection> Cylinder::intersect(const struct Ray& ray, 
 			{
 				intersectionPoint = *intersectionWithExtremity.get();
 
-				if (sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2)) >= 1.0001)
+				if (sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2)) >= 1.0001
+					|| (glm::distance(intersectionPoint, ray.origin) > currentdepth))
 				{
-					/* Intersecting the bottom, but not inside the circle. */
+					/* Intersecting the bottom, but not inside the circle OR distance > currentDepth -> let's exit. */
 
 					return nullptr;
 				}
@@ -102,9 +104,11 @@ std::unique_ptr<struct Intersection> Cylinder::intersect(const struct Ray& ray, 
 		/* Let's calculate the intersection point. If t0 < 0, we must use t1. */
 		intersectionPoint = transformedRayOrigin + ((double)((0 > t0) ? t1 : t0)) * transformedRayDirection;
 
-		if (intersectionPoint.y < -1.0001 || intersectionPoint.y > 1.0001) // epsilon
+		if ((intersectionPoint.y < -1.0001) || (intersectionPoint.y > 1.0001)
+			|| (glm::distance(intersectionPoint, ray.origin) > currentdepth)) // epsilon
 		{
-			/* If the 'y' coordinate of the intersection is not in [-1, 1], we're not intersection the cylinder. */
+			/* If the 'y' coordinate of the intersection is not in [-1, 1], we're not intersection the cylinder
+			OR distance > currentdepth -> let's exit. */
 
 			return nullptr;
 		}
@@ -115,7 +119,6 @@ std::unique_ptr<struct Intersection> Cylinder::intersect(const struct Ray& ray, 
 	/* Now calculating uv coordinates. */
 
 	float u, v;
-	float z = intersectionPoint.z;
 
 	if (checkExtremities)
 	{
@@ -134,8 +137,8 @@ std::unique_ptr<struct Intersection> Cylinder::intersect(const struct Ray& ray, 
 	else
 	{
 		/* On the side. Using the course's notes (chap. 6, slide 16). Swap 'y' and 'z'. */
-
-		if (fabs(z) < 0.0001) // epsilon
+		
+		if (fabs(intersectionPoint.z) < 0.0001) // epsilon
 		{
 			u = 0;
 		}
@@ -143,13 +146,13 @@ std::unique_ptr<struct Intersection> Cylinder::intersect(const struct Ray& ray, 
 		{
 			u = (float)(acos(intersectionPoint.x) / (2 * glm::pi<float>())); // acos(x/r)/2*pi but here r=1
 
-			if (z < 0)
+			if (intersectionPoint.z < 0)
 			{
 				u = 1 - u;
 			}
 		}
 
-		v = (float)((intersectionPoint.y + 1) / 2);
+		v = (float) ((intersectionPoint.y + 1) / 2);
 	}
 
 	vec2 uvCoordinates = vec2(u, v);

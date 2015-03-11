@@ -45,6 +45,12 @@ std::unique_ptr<struct Intersection> Box::intersect(const struct Ray& ray, decim
 	/* Let's check right face X=1. */
 	_findIntersectionWithSide(ray, glm::vec3(1, 0, 0), glm::vec3(1, 0, 1), glm::vec3(1, 1, 0), intersectionPoint,
 		found, distance, faceId, 3);
+
+	if (!found || distance > currentdepth)
+	{
+		/* If intersection not found or further away than currentdepth, let's exit. */
+		return nullptr;
+	}
 	
 	float u, v;
 

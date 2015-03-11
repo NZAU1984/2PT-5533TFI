@@ -44,6 +44,13 @@ std::unique_ptr<struct Intersection> Sphere::intersect(const struct Ray& ray, de
 
 	vec3 intersectionNormal = glm::normalize(intersectionPoint);
 
+	if (glm::distance(intersectionPoint, ray.origin) > currentdepth)
+	{
+		/* If distance > currentDepth -> let's exit. */
+
+		return nullptr;
+	}
+
 	/* Now calculating uv coordinates using the course's notes (chap. 6, slide 17). Swap 'y' and 'z'. */
 	float u, v;
 	float z = intersectionPoint.z;
