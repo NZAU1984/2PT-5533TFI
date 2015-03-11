@@ -48,30 +48,74 @@ std::unique_ptr<struct Intersection> Sphere::intersect(const struct Ray& ray, de
 	/* Let's calculate the intersection point. If t0 < 0, we must use t1. */
 	vec3 intersectionPoint = transformedRayOrigin + ((double)((0 > t0) ? t1 : t0)) * transformedRayDirection;
 
-	if (intersectionPoint.y < -1 || intersectionPoint.y > 1)
+	if (intersectionPoint.y < -1.0001 || intersectionPoint.y > 1.0001) // epsilon
 	{
 		/* If the 'y' coordinate of the intersection is not in [-1, 1], we're not intersection the cylinder. */
 		return nullptr;
 	}
 
-	vec3 intersectionNormal = glm::normalize(intersectionPoint);
+	vec3 intersectionNormal;// glm::normalize(vec3(intersectionPoint.x, 0.0f, intersectionPoint.z));
 
-	/* Now calculating uv coordinates using the course's notes (chap. 6, slide 16). Swap 'y' and 'z'. */
+	/* Let's check if we are touching the top part (y=1). */
+	float extremityCheck = intersectionPoint.y - 1;
+	bool onExtremity = true;
 
-	float u, v;
-	float z = intersectionPoint.z;
-
-	if (fabs(z) < 0.0001) // epsilon
+	if ((extremityCheck >= -0.0001) && (extremityCheck <= 0.0001))
 	{
-		u = 0;
+		// Touching top, normal towards +Y
+
+		intersectionNormal = glm::normalize(vec3(0, 1, 0));
+	}
+	else if (((extremityCheck = intersectionPoint.y + 1) >= -0.0001) || (extremityCheck <= 0.0001))
+	{
+		// Touching bottom, normal towards -Y
+
+		intersectionNormal = glm::normalize(vec3(0, -1, 0));
 	}
 	else
 	{
-		u = (float) (acos(intersectionPoint.x) / (2 * glm::pi<float>())); // acos(x/r)/2*pi but here r=1
+		// Otherwise, on the side, normal going toward X and Z, null Y component
 
-		if (z < 0)
+		intersectionNormal = glm::normalize(vec3(intersectionPoint.x, 0, intersectionPoint.z));
+
+		onExtremity = false;
+	}
+
+	/* Now calculating uv coordinates. */
+	
+	float u, v;
+	float z = intersectionPoint.z;
+
+	if (onExtremity)
+	{
+		/* On an extremity, the center of the circle is the center of the texture map. We're using page 74 of the
+		following reference :
+		https://books.google.ca/books?id=YPblYyLqBM4C&pg=PA73&lpg=PA73&dq=texture+mapping+%22circle%22+formula&source=bl&ots=y_77VGkiQb&sig=UcAoLJLQWleyANUvBuC2NlPzpC8&hl=fr&sa=X&ei=acz_VLT_EIK1ggSTgoHoAQ&ved=0CIwCEOgBMCA#v=onepage&q=texture%20mapping%20%22circle%22%20formula&f=false */
+		v = sqrt(pow(intersectionPoint.x, 2) + pow(intersectionPoint.z, 2));
+
+		u = (float) (acos(intersectionPoint.x / v) / (2 * glm::pi<float>()));
+
+		if (intersectionPoint.z < -0.0001) // epsilon
 		{
 			u = 1 - u;
+		}
+	}
+	else
+	{
+		/* On the side. Using the course's notes (chap. 6, slide 16). Swap 'y' and 'z'. */
+
+		if (fabs(z) < 0.0001) // epsilon
+		{
+			u = 0;
+		}
+		else
+		{
+			u = (float)(acos(intersectionPoint.x) / (2 * glm::pi<float>())); // acos(x/r)/2*pi but here r=1
+
+			if (z < 0)
+			{
+				u = 1 - u;
+			}
 		}
 	}
 
