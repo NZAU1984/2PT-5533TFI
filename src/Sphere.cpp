@@ -3,7 +3,7 @@
 
 /* Sphere constructor. There is not need to store the center or radius because we will transform the ray using the
 transformation matrix. This way, we "enter the sphere's world" where the center is (0, 0, 0) and the radius is 1. */
-Sphere::Sphere(vec3 position, vec3 orientation, vec3 scaling, Material* material = new Material())
+Sphere::Sphere(vec3 position, vec3 orientation, vec3 scaling, Material* material)
 	: Geometry(position, orientation, scaling, material)
 {
 

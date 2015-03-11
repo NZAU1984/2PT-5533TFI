@@ -2,6 +2,11 @@
 #include <fstream>
 #include <iostream>
 
+#include <Sphere.h>
+#include <Cylinder.h>
+#include <Cone.h>
+#include <Box.h>
+
 std::istream& operator>> (std::istream &in, vec2 &v)
 {
 	std::string word;

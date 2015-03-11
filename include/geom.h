@@ -2,9 +2,6 @@
 #include <main.h>
 #include <material.h>
 
-#include "Sphere.h"
-#include "Cylinder.h"
-
 class Geometry
 {
 public:
@@ -21,6 +18,8 @@ protected:
 	glm::mat4 _transformationMatrix;
 	glm::mat4 _transformationMatrixInverse;
 
+	std::unique_ptr<glm::vec3> _findIntersectionWithPlane(const struct Ray& ray, glm::vec3 point, glm::vec3 vec1, glm::vec3 vec2) const;
+
 	// Transform order: scaling, then rotation, then translation (use glm methods)
 	// Hint: store the transforms in this class as a single matrix
 	// Hint: preprocess any modified matrices you might need (like the inverse)
@@ -34,13 +33,13 @@ public:
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
 };*/
 
-class Box : public Geometry
+/*class Box : public Geometry
 {
 public:
 	Box(vec3 position, vec3 orientation, vec3 scaling, Material* mtl = new Material());
 
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
-};
+};*/
 
 /*class Cylinder : public Geometry
 {
@@ -50,10 +49,10 @@ public:
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
 };*/
 
-class Cone : public Geometry
+/*class Cone : public Geometry
 {
 public:
 	Cone(vec3 position, vec3 orientation, vec3 scaling, Material* mtl = new Material());
 
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
-};
+};*/
