@@ -2,6 +2,8 @@
 #include <main.h>
 #include <material.h>
 
+#include "Sphere.h"
+
 class Geometry
 {
 public:
@@ -15,19 +17,21 @@ public:
 
 protected:
 	Material* _material;
+	glm::mat4 _transformationMatrix;
+	glm::mat4 _transformationMatrixInverse;
 
 	// Transform order: scaling, then rotation, then translation (use glm methods)
 	// Hint: store the transforms in this class as a single matrix
 	// Hint: preprocess any modified matrices you might need (like the inverse)
 };
 
-class Sphere : public Geometry
+/*class Sphere : public Geometry
 {
 public:
 	Sphere(vec3 position, vec3 orientation, vec3 scaling, Material* mtl = new Material());
 
 	virtual std::unique_ptr<struct Intersection> intersect(const struct Ray& ray, decimal &currentdepth) const override;
-};
+};*/
 
 class Box : public Geometry
 {

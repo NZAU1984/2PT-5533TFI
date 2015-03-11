@@ -16,7 +16,9 @@
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\material.cpp" />
     <ClCompile Include="..\..\src\scene.cpp" />
+    <ClCompile Include="..\..\src\Sphere.cpp" />
     <ClCompile Include="..\..\src\texture.cpp" />
+    <ClCompile Include="..\..\src\Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\basic_structs.h" />
@@ -25,7 +27,9 @@
     <ClInclude Include="..\..\include\main.h" />
     <ClInclude Include="..\..\include\material.h" />
     <ClInclude Include="..\..\include\scene.h" />
+    <ClInclude Include="..\..\include\Sphere.h" />
     <ClInclude Include="..\..\include\texture.h" />
+    <ClInclude Include="..\..\include\Tools.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{252A3F6F-811C-4F2C-B2CF-43C93DF2CCD1}</ProjectGuid>
